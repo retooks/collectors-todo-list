@@ -1,0 +1,28 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+    <Include file="Libs\embeds.xml"/>
+
+    <Script file="Init.lua"/>
+
+    <Script file="Constants\Constants.lua"/>
+
+
+    <Script file="Utils\MountUtils.lua"/>
+
+    <Script file="Database\Database.lua"/>
+    <Script file="Database\Item.lua"/>
+
+    <Script file="StateManager.lua"/>
+
+    <Script file="ResetManager\ResetManager.lua"/>
+
+    <Script file="Database\Mounts\Shadowlands.lua"/>
+
+    <Script file="OptionsManager.lua"/>
+
+    <Script file="UI\Category.lua"/>
+    <Script file="UI\UI.lua"/>
+    <Script file="CollectorsToDoList.lua"/>
+
+</Ui>

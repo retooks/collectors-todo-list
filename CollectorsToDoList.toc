@@ -1,0 +1,17 @@
+## Interface: 90207
+## Version: @project-version@
+
+## Title: Collectors To-Do List
+## Notes: A to-do list for all collectors
+## Author: Retooks
+## SavedVariables: CollectorsToDoListDB
+
+## Dependencies: Blizzard_Collections
+## OptionalDeps: Ace3
+## X-Embeds: Ace3
+
+# ## X-Curse-Project-ID: xxx
+# ## X-WoWI-ID: xxx
+# ## X-Wago-ID: xxx
+
+Main.xml
