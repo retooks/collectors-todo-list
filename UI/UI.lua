@@ -5,13 +5,10 @@ local addonName, ns = ...
 ns.UI = {}
 local UI = ns.UI
 
-local StateManager = ns.StateManager
 local CollectorsToDoList = ns.CollectorsToDoList
 local CONSTANTS = ns.CONSTANTS
 local Category = ns.Category
 
-local frameShown = false
-local frame = nil
 local MainFrame
 
 local categories = {}
@@ -19,6 +16,9 @@ local tabs = {}
 local latestCategory = {}
 
 function UI:OnInit(initialState)
+    if (ns.db.char.ui == nil) then
+        ns.db.char.ui = {}
+    end
     UI:CreateFrame()
     CollectorsToDoList:RegisterMessage(CONSTANTS.EVENTS.STATE_UPDATE, function(...) local args = {...} UI:HandleStateUpdated(unpack(args)) end)
 
@@ -93,15 +93,20 @@ end
 
 function UI:CreateFrame() 
     MainFrame = CreateFrame("Frame", "CollectorsToDoList_MainFrame", UIParent, "UIPanelDialogTemplate")
-    
+
     MainFrame:SetSize(450, 600)
-    MainFrame:SetPoint("CENTER")
+    MainFrame:ClearAllPoints()
+    MainFrame:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", ns.db.char.ui.mainFrame.x, ns.db.char.ui.mainFrame.y)
     MainFrame:SetClampedToScreen(true)
     MainFrame:SetMovable(true)
     MainFrame:EnableMouse(true)
     MainFrame:RegisterForDrag("LeftButton")
     MainFrame:SetScript("OnDragStart", function(self) self:StartMoving() end)
-    MainFrame:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
+    MainFrame:SetScript("OnDragStop", function(self)
+        self:StopMovingOrSizing()
+        ns.db.char.ui.mainFrame.x = tostring(self:GetLeft())
+        ns.db.char.ui.mainFrame.y = tostring(self:GetTop())
+    end)
 
     --creates the text
     MainFrame.text = MainFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")

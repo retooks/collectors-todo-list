@@ -5,7 +5,6 @@ local addonName, ns = ...
 ns.Category = {}
 local Category = ns.Category
 
-local CollectorsToDoList = ns.CollectorsToDoList
 local StateManager = ns.StateManager
 
 

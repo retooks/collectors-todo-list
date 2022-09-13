@@ -15,6 +15,12 @@ CONSTANTS.DB = {
 
 local defaults = {
     char = {
+		ui = {
+			mainFrame = {
+				x = "10",
+				y = "-10"
+			}
+		},
         timers = {},
         state = {}
     },

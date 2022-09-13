@@ -11,7 +11,7 @@
 ## X-Embeds: Ace3
 
 # ## X-Curse-Project-ID: xxx
-# ## X-WoWI-ID: xxx
+# ## X-WoWI-ID: 26403
 # ## X-Wago-ID: xxx
 
 Main.xml
