@@ -1,5 +1,5 @@
 -- Namespaces
-local addonName, ns = ...
+local _, ns = ...
 
 ns.CONSTANTS = {}
 local CONSTANTS = ns.CONSTANTS
@@ -57,4 +57,8 @@ CONSTANTS.REGION_RESET_DAY = {
 	4, -- Europe (3)
 	5, -- Taiwan (4)
 	5 -- China (5)
+}
+
+CONSTANTS.TIME = {
+	["SECONDS_IN_DAY"] = 86400,
 }

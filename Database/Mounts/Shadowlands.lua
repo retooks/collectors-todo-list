@@ -1,5 +1,5 @@
 -- Namespaces
-local addonName, ns = ...
+local _, ns = ...
 
 -- name = true,
 -- expansion = true,
@@ -85,7 +85,7 @@ local mounts = {
 ["Bulbous Necroray"] = { name = "Bulbous Necroray", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 184160, spellId = 344574, resetPeriod = CONSTANTS.RESET_PERIOD.DAILY, tip = "Maldraxxus/Necrolord Callings - Tribute of the Ambitious"},
 ["Infested Necroray"] = { name = "Infested Necroray", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 184161, spellId = 344576, resetPeriod = CONSTANTS.RESET_PERIOD.DAILY, tip = "Maldraxxus/Necrolord Callings - Tribute of the Ambitious"},
 ["Pestilent Necroray"] = { name = "Pestilent Necroray", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 184162, spellId = 344575, resetPeriod = CONSTANTS.RESET_PERIOD.DAILY, tip = "Maldraxxus/Necrolord Callings - Tribute of the Ambitious"},
-["Bound Shadehound"] = { name = "Bound Shadehound", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 184168, spellId = 344577, resetPeriod = CONSTANTS.RESET_PERIOD.FORTNIGHTLY, tip = "Rare - Feral Shadehound"},
+["Bound Shadehound"] = { name = "Bound Shadehound", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 184168, spellId = 344577, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Rare - Feral Shadehound"},
 ["Corridor Creeper"] = { name = "Corridor Creeper", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 184166, spellId = 344578, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Achievement - Twisting Corridors: Layer 8"},
 ["Voracious Gorger"] = { name = "Voracious Gorger", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 184183, spellId = 344659, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Achievement - Glory of the Shadowlands Hero"},
 ["Slime Serpent"] = { name = "Slime Serpent", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, spellId = 346141, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Solo Plagefall Heroic"},
