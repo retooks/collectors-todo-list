@@ -11,10 +11,6 @@ local CollectorsToDoList = ns.CollectorsToDoList
 local CONSTANTS = ns.CONSTANTS
 
 function StateManager:OnInit()
-	if ns.db.char.state == nil then
-		ns.db.char.state = {}
-	end
-
 	local allMounts = Database:GetAllItems(CONSTANTS.DB.TABLES.MOUNTS)
 	for _, mount in pairs(allMounts) do
 		if ns.db.char.state[mount.resetPeriod] == nil then
@@ -41,7 +37,7 @@ function StateManager:OnInit()
 end
 
 function StateManager:SetValue(item, newState)
-	local dbItem = Database:GetItem("mounts", item.name)	
+	local dbItem = Database:GetItem(CONSTANTS.DB.TABLES.MOUNTS, item.name)
 
 	if ns.db.char.state[dbItem.resetPeriod][dbItem.name] ~= newState then
 		ns.db.char.state[dbItem.resetPeriod][dbItem.name] = newState
@@ -75,10 +71,6 @@ end
 -- }
 function StateManager:ConvertStateToUI()
 	local uiState = {}
-
-	for k, v in pairs(CONSTANTS.RESET_PERIOD) do
-
-	end
 
 	for k, v in pairs(ns.db.char.state) do
 		for key, value in pairs(ns.db.char.state[k]) do

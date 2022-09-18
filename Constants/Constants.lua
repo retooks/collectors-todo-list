@@ -33,12 +33,21 @@ CONSTANTS.EXPANSION = {
 }
 
 CONSTANTS.RESET_PERIOD = {
-	["DAILY"] = "daily",
-	["BIWEEKLY"] = "biweekly",
-	["WEEKLY"] = "weekly",
-	["FORTNIGHTLY"] = "fortnightly",
-	["MONTHLY"] = "monthly",
-	["UNLIMITED"] = "unlimited"
+	["DAILY"] = "Daily",
+	["BIWEEKLY"] = "Bi-Weekly",
+	["WEEKLY"] = "Weekly",
+	["FORTNIGHTLY"] = "Fortnightly",
+	["MONTHLY"] = "Monthly",
+	["UNLIMITED"] = "Unlimited"
+}
+
+CONSTANTS.RESET_PERIOD_DISPLAY_POSITION = {
+	["Daily"] = 1,
+	["Bi-Weekly"] = 2,
+	["Weekly"] = 3,
+	["Fortnightly"] = 4,
+	["Monthly"] = 5,
+	["Unlimited"] = 6
 }
 
 CONSTANTS.DAY_OF_WEEK = {
