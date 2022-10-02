@@ -6,9 +6,9 @@ local CollectorsToDoList = ns.CollectorsToDoList
 local Database = ns.Database
 local ResetManager = ns.ResetManager
 local StateManager = ns.StateManager
+local EventManager = ns.EventManager
 local OptionsManager = ns.OptionsManager
 local UI = ns.UI
-local CONSTANTS = ns.CONSTANTS
 
 function CollectorsToDoList:OnInitialize()
     -- Called when the addon is loaded
@@ -24,7 +24,8 @@ function CollectorsToDoList:OnEnable()
     if (loaded) then
         --Depends on Blizz Collections
         StateManager:OnInit()
-        --OptionsManager:OnInit()
+        EventManager:OnInit()
+        OptionsManager:OnInit()
         UI:OnInit(StateManager:ConvertStateToUI())
     else
         self:Print("it broke ", reason)

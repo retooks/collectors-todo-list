@@ -1,0 +1,60 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+
+    <Frame name="BorderNineSlice" useParentLevel="true" inherits="NineSlicePanelTemplate" virtual="true">
+        <KeyValues>
+            <KeyValue key="layoutType" value="InsetFrameTemplate" type="string"/>
+        </KeyValues>
+        <Anchors>
+            <Anchor point="TOPLEFT" relativeKey="$parent.Background"/>
+            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.Background"/>
+        </Anchors>
+    </Frame>
+
+    <Button name="CategoryHeaderTemplate" virtual="true">
+        <Size y="25"/>
+        <Layers>
+            <Layer level="OVERLAY" textureSubLevel="1">
+                <FontString parentKey="Label" inherits="GameFontNormal_NoShadow" justifyH="LEFT">
+                    <Size y="10"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="10" y="2"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="LeftPiece" atlas="Professions-recipe-header-left" useAtlasSize="true">
+                    <Anchors>
+                        <Anchor point="LEFT" y="2"/>
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="RightPiece" atlas="Professions-recipe-header-right" useAtlasSize="true">
+                    <Anchors>
+                        <Anchor point="RIGHT" y="2"/>
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="CenterPiece" atlas="Professions-recipe-header-middle" useAtlasSize="false">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeKey="$parent.LeftPiece"/>
+                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT" relativeKey="$parent.RightPiece"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="CollapseIcon">
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-10" y="2"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="CollapseIconAlphaAdd" alphaMode="ADD">
+                    <Anchors>
+                        <Anchor point="CENTER" relativeKey="$parent.CollapseIcon"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Button>
+
+</Ui>

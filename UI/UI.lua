@@ -14,7 +14,6 @@ local MainFrame
 local activeResetPeriods = {}
 local categories = {}
 local tabs = {}
-local latestCategory = {}
 
 function UI:OnInit(initialState)
     if (ns.db.char.ui == nil) then
@@ -28,14 +27,13 @@ function UI:OnInit(initialState)
     table.sort(activeResetPeriods, function(a,b) return CONSTANTS.RESET_PERIOD_DISPLAY_POSITION[a] < CONSTANTS.RESET_PERIOD_DISPLAY_POSITION[b] end)
 
     UI:CreateFrame()
-    CollectorsToDoList:RegisterMessage(CONSTANTS.EVENTS.STATE_UPDATE, function(...) local args = {...} UI:HandleStateUpdated(unpack(args)) end)
 
     for resetPeriodName, resetPeriodValues in pairs(initialState) do
         for catName, catValues in pairs(resetPeriodValues) do
             UI:AddCategory(resetPeriodName, catName)
             table.sort(catValues, function(a, b) return a.item.name < b.item.name end)
             for k, v in ipairs(catValues) do
-                UI:AddCheckbox(resetPeriodName, catName, v.item, v.state)
+                UI:AddValue(resetPeriodName, catName, v.item, v.state)
             end
         end
     end
@@ -76,21 +74,22 @@ local function SetTabs(frame, numTabs, ...)
     local frameName = frame:GetName()
 
     for i = 1, numTabs do   
-        local tab = CreateFrame("Button", frameName.."Tab"..i, frame, "CharacterFrameTabButtonTemplate")
+        local tab = CreateFrame("Button", frameName.."Tab"..i, frame, "PanelTabButtonTemplate")
         tab:SetID(i)
         tab:SetText(select(i, ...))
         tab:SetScript("OnClick", Tab_OnClick)
-        
-        tab.content = CreateFrame("Frame", nil, MainFrame.ScrollFrame)
-        tab.content:SetSize(450, 500)
+
+        tab.content = CreateFrame("Frame", nil, MainFrame.ScrollFrame, "VerticalLayoutFrame")
+        tab.content:SetWidth(350)
         tab.content:Hide()
+        tab.content:MarkDirty()
         
         table.insert(contents, tab.content)
         
         if (i == 1) then
-            tab:SetPoint("TOPLEFT", MainFrame, "BOTTOMLEFT", 5, 7)
+            tab:SetPoint("TOPLEFT", MainFrame, "BOTTOMLEFT", 5, -1)
         else
-            tab:SetPoint("TOPLEFT", _G[frameName.."Tab"..(i - 1)], "TOPRIGHT", -14, 0)
+            tab:SetPoint("TOPLEFT", _G[frameName.."Tab"..(i - 1)], "TOPRIGHT", 0, 0)
         end 
     end
     
@@ -100,7 +99,7 @@ local function SetTabs(frame, numTabs, ...)
 end
 
 function UI:CreateFrame() 
-    MainFrame = CreateFrame("Frame", "CollectorsToDoList_MainFrame", UIParent, "UIPanelDialogTemplate")
+    MainFrame = CreateFrame("Frame", "CollectorsToDoList_MainFrame", UIParent)
 
     MainFrame:SetSize(450, 600)
     MainFrame:ClearAllPoints()
@@ -116,6 +115,22 @@ function UI:CreateFrame()
         ns.db.char.ui.mainFrame.y = tostring(self:GetTop())
     end)
 
+
+    local tex = MainFrame:CreateTexture(nil, "BACKGROUND")
+    tex:SetAllPoints()
+    tex:SetTexture("Interface/Professions/Professions")
+    --tex:SetBlendMode("ADD") --TODO add option
+    tex:SetSize(450, 600)
+    tex:SetTexCoord(0.02940, 0.14501953125, 0.08294, 0.57397)
+
+    --TODO add close button
+
+    local closeButton = CreateFrame("Button", "CTDL_CloseButton", MainFrame, "UIPanelCloseButton")
+    closeButton:SetSize(20, 20)
+    closeButton:SetPoint("TOPRIGHT", MainFrame, "TOPRIGHT", -5, -5)
+
+    CreateFrame("Frame", "CTDL_BorderNineSlice", MainFrame, "BorderNineSlice")
+
     --creates the text
     MainFrame.text = MainFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     MainFrame.text:SetSize(0, 25)
@@ -124,13 +139,14 @@ function UI:CreateFrame()
 
     --create scroll frame
     MainFrame.ScrollFrame = CreateFrame("ScrollFrame", "CollectorsToDoList_ScrollFrame", MainFrame, "UIPanelScrollFrameTemplate")
-    MainFrame.ScrollFrame:SetPoint("TOPLEFT", CollectorsToDoList_MainFrameDialogBG, "TOPLEFT", 4, -8)
-    MainFrame.ScrollFrame:SetPoint("BOTTOMRIGHT", CollectorsToDoList_MainFrameDialogBG, "BOTTOMRIGHT", -3, 4)
+    MainFrame.ScrollFrame:SetWidth(375)
+    MainFrame.ScrollFrame:SetPoint("TOPLEFT", MainFrame, "TOPLEFT", 50, -33)
+    MainFrame.ScrollFrame:SetPoint("BOTTOMRIGHT", MainFrame, "BOTTOMRIGHT", -25, 4)
     MainFrame.ScrollFrame:SetClipsChildren(true)
 
     MainFrame.ScrollFrame.ScrollBar:ClearAllPoints()
-    MainFrame.ScrollFrame.ScrollBar:SetPoint("TOPLEFT", MainFrame.ScrollFrame, "TOPRIGHT", -12, -18)
-    MainFrame.ScrollFrame.ScrollBar:SetPoint("BOTTOMRIGHT", MainFrame.ScrollFrame, "BOTTOMRIGHT", -7, 18)
+    MainFrame.ScrollFrame.ScrollBar:SetPoint("TOPLEFT", MainFrame.ScrollFrame, "TOPRIGHT", -16, -18)
+    MainFrame.ScrollFrame.ScrollBar:SetPoint("BOTTOMRIGHT", MainFrame.ScrollFrame, "BOTTOMRIGHT", -11, 18)
 
     local tabTable = { SetTabs(MainFrame, #activeResetPeriods, unpack(activeResetPeriods)) }
     for activeCount = 1, #activeResetPeriods do
@@ -142,24 +158,16 @@ end
 
 function UI:AddCategory(tabName, categoryName)
     local cat = Category:CreateCategory(categoryName, tabs[tabName])
+    cat.layoutIndex = tabs[tabName]:GetNumChildren() + 1
+    tabs[tabName]:MarkDirty()
 
-    if latestCategory[tabName] == nil then
-        cat["frame"]:SetPoint("TOP", -18, -10)
-    else
-        cat["frame"]:SetPoint("TOP", latestCategory[tabName], "BOTTOM", 0, -10)
-    end
-
-    latestCategory[tabName] = cat["frame"]
     if categories[tabName] == nil then
         categories[tabName] = {}
     end
     categories[tabName][categoryName] = cat
 end
 
-function UI:AddCheckbox(tabName, categoryName, item, startingState)
-    Category:AddCheckbox(categories[tabName][categoryName], item, startingState)
-end
-
-function UI:HandleStateUpdated(eventName, item, newValue)
-    Category:GetCheckboxFromItem(categories[item["resetPeriod"]][item["expansion"]], item):SetChecked(newValue)
+function UI:AddValue(tabName, categoryName, item, startingState)
+    Category:AddValue(categories[tabName][categoryName], item, startingState)
+    tabs[tabName]:MarkDirty()
 end

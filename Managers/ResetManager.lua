@@ -52,7 +52,7 @@ end
 
 function ResetManager:ResetTimePeriod(resetPeriod)
     for k,_ in pairs(StateManager:GetState(resetPeriod)) do
-        StateManager:SetValue({ ["name"] = k }, false)
+        StateManager:ResetItem({ ["name"] = k, ["resetPeriod"] = resetPeriod })
     end
 end
 

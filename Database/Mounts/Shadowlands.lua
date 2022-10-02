@@ -12,6 +12,22 @@ local Mounts_Shadowlands = ns.Mounts_Shadowlands
 
 local CONSTANTS = ns.CONSTANTS
 
+--["Enchanted Wakener's Runestag"] = {
+--	name = "Enchanted Wakener's Runestag",
+--	expansion = CONSTANTS.EXPANSION.SHADOWLANDS,
+--	type = CONSTANTS.ITEM_TYPE.MOUNT,
+--	itemId = 180723,
+--	spellId = 332247,
+--	resetPeriod = CONSTANTS.RESET_PERIOD.BIWEEKLY,
+--	tip = "From Queen's Conservatory"
+--	activities = {
+--		["Kill Rare"] = { name = "Kill Rare", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=123456},
+--		["Daily Quest 1"] = { name = "Daily Quest 1", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=12345},
+--		["Loot some chest"] = { name = "Loot some chest", type = CONSTANTS.ACTIVITY_TYPE.LOOT_CONTAINER, containerId=1234},
+--		["Get Achievement"] = { name = "Get Achievement", type = CONSTANTS.ACTIVITY_TYPE.ACHIEVEMENT, achievementId=67321},
+--		["Get different Achievement"] = { name = "Get different Achievement", type = CONSTANTS.ACTIVITY_TYPE.ACHIEVEMENT, achievementId=67322}
+--	}
+--}
 
 local mounts = {
 ["Shadeleaf Runestag"] = { name = "Shadeleaf Runestag", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 180413, spellId = 332243, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Buy from vendor."},
@@ -155,7 +171,7 @@ local mounts = {
 ["Prototype Leaper"] = { name = "Prototype Leaper", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 188809, spellId = 363703, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Protoform Synthesis"},
 ["Russet Bufonid"] = { name = "Russet Bufonid", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 188810, spellId = 363706, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Protoform Synthesis"},
 ["Heartbond Lupine"] = { name = "Heartbond Lupine", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 190580, spellId = 367673, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Protoform Synthesis"},
-["Colossal Plaguespew Mawrat"] = { name = "Colossal Plaguespew Mawrat", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 190765, spellId = 368105, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Rare - Rhuv, Gorger of Ruin"},
+["Colossal Plaguespew Mawrat"] = { name = "Colossal Plaguespew Mawrat", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 190765, spellId = 368105, resetPeriod = CONSTANTS.RESET_PERIOD.DAILY, tip = "Rare - Rhuv, Gorger of Ruin"},
 ["Colossal Wraithbound Mawrat"] = { name = "Colossal Wraithbound Mawrat", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 190766, spellId = 368128, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "Treasure - Mawsworn Supply Chest"},
 ["Zereth Overseer"] = { name = "Zereth Overseer", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 190768, spellId = 368158, resetPeriod = CONSTANTS.RESET_PERIOD.UNLIMITED, tip = "The Jailer - Sepulcher of the First Ones Mythic"},
 ["Hopecrusher Gargon"] = { name = "Hopecrusher Gargon", expansion = CONSTANTS.EXPANSION.SHADOWLANDS, type = CONSTANTS.ITEM_TYPE.MOUNT, itemId = 180581, spellId = 312753, resetPeriod = CONSTANTS.RESET_PERIOD.DAILY, tip = "Rare - Hopecrusher"},

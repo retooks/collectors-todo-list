@@ -82,6 +82,7 @@ end
 
 function migrateDataToLatest()
 	migrateData100To101()
+	migrateData101To110()
 end
 
 function migrateData100To101()
@@ -123,5 +124,18 @@ function migrateData100To101()
 		end
 
 		ns.db.char.dataVersion = "1.0.1"
+	end
+end
+
+function migrateData101To110()
+	if ns.db.char.dataVersion == "1.0.1" then
+		for _,v in pairs(CONSTANTS.RESET_PERIOD) do
+			if ns.db.char.state[v] ~= nil then
+				for k1,v1 in pairs(ns.db.char.state[v]) do
+					ns.db.char.state[v][k1] = {["main"] = v1}
+				end
+			end
+		end
+		ns.db.char.dataVersion = "1.1.0"
 	end
 end
