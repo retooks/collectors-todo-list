@@ -1,12 +1,10 @@
 -- Namespaces
-local addonName, ns = ...
+local _, ns = ...
 
 -- Expose functions
 ns.ResetManager = {}
 local ResetManager = ns.ResetManager
 
-local CollectorsToDoList = ns.CollectorsToDoList
-local Timer = ns.Timer
 local CONSTANTS = ns.CONSTANTS
 local StateManager = ns.StateManager
 
@@ -14,7 +12,7 @@ local resetPeriodDelays = {}
 
 
 function ResetManager:OnInit()
-    for k, v in pairs(ns.db.char.timers) do
+    for _, v in pairs(ns.db.char.timers) do
         if ResetManager:HasTimerExpired(v) then
             ResetManager:TriggerTimer(v)
         else
@@ -24,8 +22,9 @@ function ResetManager:OnInit()
 
     resetPeriodDelays[CONSTANTS.RESET_PERIOD.DAILY] = C_DateAndTime.GetSecondsUntilDailyReset()
     resetPeriodDelays[CONSTANTS.RESET_PERIOD.WEEKLY] = C_DateAndTime.GetSecondsUntilWeeklyReset()
+    resetPeriodDelays[CONSTANTS.RESET_PERIOD.BIWEEKLY] = ResetManager:GetSecondsUntilBiWeeklyReset()
 
-    for k,v in pairs(resetPeriodDelays) do
+    for k,_ in pairs(resetPeriodDelays) do
         ResetManager:StartResetTimer(k)
     end
 end
@@ -52,7 +51,7 @@ function ResetManager:TriggerTimer(timer)
 end
 
 function ResetManager:ResetTimePeriod(resetPeriod)
-    for k,v in pairs(StateManager:GetState(resetPeriod)) do
+    for k,_ in pairs(StateManager:GetState(resetPeriod)) do
         StateManager:SetValue({ ["name"] = k }, false)
     end
 end
@@ -61,4 +60,46 @@ function ResetManager:StartResetTimer(resetPeriod)
     if ns.db.char["timers"][resetPeriod] == nil then
         ResetManager:CreateTimer(resetPeriod, resetPeriodDelays[resetPeriod])
     end
+end
+
+function ResetManager:GetSecondsUntilBiWeeklyReset()
+    local midWeekReset = ResetManager:GetSecondsUntilDayAndTime(CONSTANTS.DAY_OF_WEEK[7], 20, 0)
+    local endWeekReset = C_DateAndTime.GetSecondsUntilWeeklyReset()
+
+    return midWeekReset < endWeekReset and midWeekReset or endWeekReset
+end
+
+function ResetManager:GetSecondsUntilDayAndTime(dayOfWeek, hour, min)
+    local target = date("*t")
+    target["hour"] = hour
+    target["min"] = min
+    target["day"] = target["day"] + ResetManager:DaysUntilNextDayOfWeek(dayOfWeek)
+
+    local diff = difftime(time(target), time())
+
+    if diff < 0 then
+        diff = diff + (7 * CONSTANTS.TIME.SECONDS_IN_DAY)
+    end
+
+    return diff
+end
+
+function ResetManager:DaysUntilNextDayOfWeek(dayOfWeek)
+    local current = date("*t")
+    local currentIndex = current["wday"]
+    local currentDayOfWeek = CONSTANTS.DAY_OF_WEEK[currentIndex]
+
+    local daysNeeded = 0
+    while(currentDayOfWeek ~= dayOfWeek) do
+        daysNeeded = daysNeeded + 1
+
+        if (currentIndex == 7) then
+            currentIndex = 1
+        else
+            currentIndex = currentIndex + 1
+        end
+
+        currentDayOfWeek = CONSTANTS.DAY_OF_WEEK[currentIndex]
+    end
+    return daysNeeded
 end

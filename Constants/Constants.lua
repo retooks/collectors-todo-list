@@ -1,5 +1,5 @@
 -- Namespaces
-local addonName, ns = ...
+local _, ns = ...
 
 ns.CONSTANTS = {}
 local CONSTANTS = ns.CONSTANTS
@@ -33,12 +33,21 @@ CONSTANTS.EXPANSION = {
 }
 
 CONSTANTS.RESET_PERIOD = {
-	["DAILY"] = "daily",
-	["BIWEEKLY"] = "biweekly",
-	["WEEKLY"] = "weekly",
-	["FORTNIGHTLY"] = "fortnightly",
-	["MONTHLY"] = "monthly",
-	["UNLIMITED"] = "unlimited"
+	["DAILY"] = "Daily",
+	["BIWEEKLY"] = "Bi-Weekly",
+	["WEEKLY"] = "Weekly",
+	["FORTNIGHTLY"] = "Fortnightly",
+	["MONTHLY"] = "Monthly",
+	["UNLIMITED"] = "Unlimited"
+}
+
+CONSTANTS.RESET_PERIOD_DISPLAY_POSITION = {
+	["Daily"] = 1,
+	["Bi-Weekly"] = 2,
+	["Weekly"] = 3,
+	["Fortnightly"] = 4,
+	["Monthly"] = 5,
+	["Unlimited"] = 6
 }
 
 CONSTANTS.DAY_OF_WEEK = {
@@ -57,4 +66,8 @@ CONSTANTS.REGION_RESET_DAY = {
 	4, -- Europe (3)
 	5, -- Taiwan (4)
 	5 -- China (5)
+}
+
+CONSTANTS.TIME = {
+	["SECONDS_IN_DAY"] = 86400,
 }

@@ -46,7 +46,7 @@ function CollectorsToDoList:ChatCommand(input)
     end
 end
 
---@do-not-package@
+--@alpha@
 
 function CollectorsToDoList:ChatCommandDebug(input)
     self:Print("debug")
@@ -88,4 +88,4 @@ function CollectorsToDoList:dump(o)
       return tostring(o)
    end
 end
---@end-do-not-package@
+--@end-alpha@
