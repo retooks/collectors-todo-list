@@ -10,6 +10,8 @@ CONSTANTS.EVENTS = {
 
 CONSTANTS.ACTIVITY_TYPE = {
 	["ACHIEVEMENT"] = "achievement",
+	["DAILY_QUEST"] = "dailyquest",
+	["LOOT_CONTAINER"] = "lootcontainer",
 	["RAID_BOSS"] = "raidboss",
 	["RARE_KILL"] = "rarekill",
 }
