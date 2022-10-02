@@ -26,10 +26,12 @@ function Category:toggle(category)
     local categoryValueList = category.categoryValueList
 
     categoryValueList:SetShown(not categoryValueList:IsShown())
-    local collapsed = not categoryValueList:IsShown()
-    local atlas = collapsed and "Professions-recipe-header-expand" or "Professions-recipe-header-collapse";
-    categoryHeader.CollapseIcon:SetAtlas(atlas, TextureKitConstants.UseAtlasSize);
-    categoryHeader.CollapseIconAlphaAdd:SetAtlas(atlas, TextureKitConstants.UseAtlasSize);
+    if ns.isDF then
+        local collapsed = not categoryValueList:IsShown()
+        local atlas = collapsed and "Professions-recipe-header-expand" or "Professions-recipe-header-collapse";
+        categoryHeader.CollapseIcon:SetAtlas(atlas, TextureKitConstants.UseAtlasSize);
+        categoryHeader.CollapseIconAlphaAdd:SetAtlas(atlas, TextureKitConstants.UseAtlasSize);
+    end
     category:MarkDirty()
 end
 

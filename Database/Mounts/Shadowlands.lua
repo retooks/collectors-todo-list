@@ -19,7 +19,7 @@ local CONSTANTS = ns.CONSTANTS
 --	itemId = 180723,
 --	spellId = 332247,
 --	resetPeriod = CONSTANTS.RESET_PERIOD.BIWEEKLY,
---	tip = "From Queen's Conservatory"
+--	tip = "From Queen's Conservatory",
 --	activities = {
 --		["Kill Rare"] = { name = "Kill Rare", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=123456},
 --		["Daily Quest 1"] = { name = "Daily Quest 1", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=12345},

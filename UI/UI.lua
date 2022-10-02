@@ -73,8 +73,8 @@ local function SetTabs(frame, numTabs, ...)
     local contents = {}
     local frameName = frame:GetName()
 
-    for i = 1, numTabs do   
-        local tab = CreateFrame("Button", frameName.."Tab"..i, frame, "PanelTabButtonTemplate")
+    for i = 1, numTabs do
+        local tab = CreateFrame("Button", frameName.."Tab"..i, frame, ns.isDF and "PanelTabButtonTemplate" or "CharacterFrameTabButtonTemplate")
         tab:SetID(i)
         tab:SetText(select(i, ...))
         tab:SetScript("OnClick", Tab_OnClick)
@@ -89,7 +89,7 @@ local function SetTabs(frame, numTabs, ...)
         if (i == 1) then
             tab:SetPoint("TOPLEFT", MainFrame, "BOTTOMLEFT", 5, -1)
         else
-            tab:SetPoint("TOPLEFT", _G[frameName.."Tab"..(i - 1)], "TOPRIGHT", 0, 0)
+            tab:SetPoint("TOPLEFT", _G[frameName.."Tab"..(i - 1)], "TOPRIGHT", ns.isDF and 0 or -14, 0)
         end 
     end
     
@@ -118,7 +118,7 @@ function UI:CreateFrame()
 
     local tex = MainFrame:CreateTexture(nil, "BACKGROUND")
     tex:SetAllPoints()
-    tex:SetTexture("Interface/Professions/Professions")
+    tex:SetTexture(ns.isDF and "Interface/Professions/Professions" or "Interface/Addons/CollectorsToDoList/Textures/Professions")
     --tex:SetBlendMode("ADD") --TODO add option
     tex:SetSize(450, 600)
     tex:SetTexCoord(0.02940, 0.14501953125, 0.08294, 0.57397)
@@ -154,6 +154,7 @@ function UI:CreateFrame()
     end
 
     MainFrame:Hide()
+    table.insert(UISpecialFrames, MainFrame:GetName())
 end
 
 function UI:AddCategory(tabName, categoryName)
