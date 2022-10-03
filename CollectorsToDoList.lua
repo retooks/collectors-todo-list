@@ -12,7 +12,7 @@ local UI = ns.UI
 
 function CollectorsToDoList:OnInitialize()
     -- Called when the addon is loaded
-    ns.isDF = select(4, GetBuildInfo()) > 100000
+    ns.isDF = select(4, GetBuildInfo()) >= 100000
 
     Database:OnInit()
     ResetManager:OnInit()

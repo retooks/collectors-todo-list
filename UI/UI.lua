@@ -15,6 +15,8 @@ local activeResetPeriods = {}
 local categories = {}
 local tabs = {}
 
+-- Rebuild how we build the UI panels
+-- Need to be able to refresh/redo it based on options changing
 function UI:OnInit(initialState)
     if (ns.db.char.ui == nil) then
         ns.db.char.ui = {}
@@ -92,8 +94,10 @@ local function SetTabs(frame, numTabs, ...)
             tab:SetPoint("TOPLEFT", _G[frameName.."Tab"..(i - 1)], "TOPRIGHT", ns.isDF and 0 or -14, 0)
         end 
     end
-    
-    Tab_OnClick(_G[frameName.."Tab1"])
+
+    if #contents > 0 then
+        Tab_OnClick(_G[frameName.."Tab1"])
+    end
     
     return unpack(contents)
 end
@@ -119,11 +123,11 @@ function UI:CreateFrame()
     local tex = MainFrame:CreateTexture(nil, "BACKGROUND")
     tex:SetAllPoints()
     tex:SetTexture(ns.isDF and "Interface/Professions/Professions" or "Interface/Addons/CollectorsToDoList/Textures/Professions")
-    --tex:SetBlendMode("ADD") --TODO add option
+    if ns.db.profile.ui.transparent then
+        tex:SetBlendMode("ADD")
+    end
     tex:SetSize(450, 600)
     tex:SetTexCoord(0.02940, 0.14501953125, 0.08294, 0.57397)
-
-    --TODO add close button
 
     local closeButton = CreateFrame("Button", "CTDL_CloseButton", MainFrame, "UIPanelCloseButton")
     closeButton:SetSize(20, 20)

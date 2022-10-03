@@ -23,15 +23,16 @@ CONSTANTS.ITEM_TYPE = {
 }
 
 CONSTANTS.EXPANSION = {
-	["VANILLA"] = "Vanilla",
-	["TBC"] = "The Burning Crusade",
-	["WOTLK"] = "Wrath of the Lich King",
-	["CATA"] = "Cataclysm",
-	["MOP"] = "Mists of Pandaria",
-	["WOD"] = "Warlords of Draenor",
-	["LEGION"] = "Legion",
-	["BFA"] = "Battle for Azeroth",
+	--["VANILLA"] = "Vanilla",
+	--["TBC"] = "The Burning Crusade",
+	--["WOTLK"] = "Wrath of the Lich King",
+	--["CATA"] = "Cataclysm",
+	--["MOP"] = "Mists of Pandaria",
+	--["WOD"] = "Warlords of Draenor",
+	--["LEGION"] = "Legion",
+	--["BFA"] = "Battle for Azeroth",
 	["SHADOWLANDS"] = "Shadowlands",
+	--["DRAGONFLIGHT"] = "Dragonflight"
 }
 
 CONSTANTS.RESET_PERIOD = {

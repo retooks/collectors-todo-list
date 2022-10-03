@@ -22,7 +22,7 @@ function OptionsManager:OnInit()
           name = "General Options",
           type = "group",
           order = 0,
-          args={
+          args = {
             groupfield = {
               name = "Select Grouping",
               desc = "Enables / disables the tracking of mounts.",
@@ -30,10 +30,25 @@ function OptionsManager:OnInit()
               style = "dropdown",
               values = {
                 ["expansion"] = "Expansion",
-                ["resetPeriod"] = "Reset Period" 
-              },
-              set = function(info,val) ns.db.profile.grouping = val end,
+                --["resetPeriod"] = "Reset Period",
+  },
+              set = function(info, val) ns.db.profile.grouping = val end,
               get = function(info) return ns.db.profile.grouping end,
+              order = 0
+            },
+          }
+        },
+        uioptions={
+          name = "UI",
+          type = "group",
+          order = 1,
+          args = {
+            transparent = {
+              name = "Enable transparency",
+              desc = "Enables / disables the transparency on the UI.",
+              type = "toggle",
+              set = function(info, val) ns.db.profile.ui.transparent = val end,
+              get = function(info) return ns.db.profile.ui.transparent end,
               order = 0
             },
           }
@@ -41,13 +56,13 @@ function OptionsManager:OnInit()
         mountoptions={
           name = "Mounts",
           type = "group",
-          order = 1,
-          args={
+          order = 2,
+          args = {
             mounts = {
               name = "Enable Mounts",
               desc = "Enables / disables the tracking of mounts.",
               type = "toggle",
-              set = function(info,val) ns.db.profilet.mounts = val end,
+              set = function(info, val) ns.db.profile.mounts = val end,
               get = function(info) return ns.db.profile.mounts end,
               order = 0
             },
@@ -65,7 +80,7 @@ function OptionsManager:OnInit()
         --petoptions={
         --  name = "Pets",
         --  type = "group",
-        --  order = 2,
+        --  order = 3,
         --  args={
         --    pets = {
         --      name = "Enable Pets",
@@ -79,7 +94,7 @@ function OptionsManager:OnInit()
         --toyoptions={
         --  name = "Toys",
         --  type = "group",
-        --  order = 3,
+        --  order = 4,
         --  args={
         --    toys = {
         --      name = "Enable Toys",

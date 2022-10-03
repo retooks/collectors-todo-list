@@ -12,6 +12,9 @@ local CONSTANTS = ns.CONSTANTS
 
 function StateManager:OnInit()
 	local allMounts = Database:GetAllItems(CONSTANTS.DB.TABLES.MOUNTS)
+	if allMounts == nil then
+		return
+	end
 -- For each mount
 	for _, mount in pairs(allMounts) do
 		if ns.db.char.state[mount.resetPeriod] == nil then
@@ -43,7 +46,7 @@ function StateManager:OnInit()
 --		if not in database, remove state
 --		if owned now, remove from state
 			if allMounts[k] == nil or MountUtils:IsMountOwnedBySpellId(allMounts[k].spellId) then
-				StateManager:RemoveValue(k)
+				StateManager:RemoveValue({ ["name"] = k, ["resetPeriod"] = resetPeriod })
 			end
 		end
 	end
@@ -92,7 +95,7 @@ end
 
 function StateManager:ExistsInOtherPeriod(item)
 	for k,v in pairs(CONSTANTS.RESET_PERIOD) do
-		if ns.db.char.state[v][item.name] ~= nil then
+		if ns.db.char.state[v] ~= nil and ns.db.char.state[v][item.name] ~= nil then
 			return v
 		end
 	end
@@ -165,10 +168,10 @@ function StateManager:ConvertStateToUI()
 			if uiState[item["resetPeriod"]] == nil then
 				uiState[item["resetPeriod"]] = {}
 			end
-			if uiState[item["resetPeriod"]][item["expansion"]] == nil then
-				uiState[item["resetPeriod"]][item["expansion"]] = {}
+			if uiState[item["resetPeriod"]][item[ns.db.profile.grouping]] == nil then
+				uiState[item["resetPeriod"]][item[ns.db.profile.grouping]] = {}
 			end
-			table.insert(uiState[item["resetPeriod"]][item["expansion"]], { ["item"] = item, ["state"] = value })
+			table.insert(uiState[item["resetPeriod"]][item[ns.db.profile.grouping]], { ["item"] = item, ["state"] = value })
 		end
 	end
 

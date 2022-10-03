@@ -25,11 +25,16 @@ local defaults = {
         state = {}
     },
     profile = {
+		ui = {
+			transparent = false
+		},
+		mounts = true,
     	grouping = "expansion",
     	expansions = {
 			["LEGION"] = true,
 			["CATA"] = true,
 			["SHADOWLANDS"] = true,
+			["DRAGONFLIGHT"] = true,
 			["VANILLA"] = true,
 			["WOD"] = true,
 			["TBC"] = true,
@@ -50,7 +55,17 @@ function Database:OnInit()
 		["MOUNTS"] = "mounts"
 	}
 
-	ns.Mounts_Shadowlands:OnInit()
+	for k,v in pairs(CONSTANTS.DB.TABLES) do
+		if ns.db.tables[v] == nil then
+			ns.db.tables[v] = {}
+		end
+	end
+
+	if ns.db.profile.mounts then
+		if ns.db.profile.expansions["SHADOWLANDS"] then
+			ns.Mounts_Shadowlands:OnInit()
+		end
+	end
 end	
 
 --[[
@@ -64,9 +79,6 @@ end
 --]]
 
 function Database:AddItems(tableName, items)
-	if ns.db.tables[tableName] == nil then
-		ns.db.tables[tableName] = {}
-	end
 	for key, item in pairs(items) do
 		ns.db.tables[tableName][key] = item
 	end
