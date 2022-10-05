@@ -28,7 +28,7 @@ function CollectorsToDoList:OnEnable()
         StateManager:OnInit()
         EventManager:OnInit()
         OptionsManager:OnInit()
-        UI:OnInit(StateManager:ConvertStateToUI())
+        UI:OnInit()
     else
         self:Print("it broke ", reason)
     end
@@ -53,6 +53,9 @@ end
 
 function CollectorsToDoList:ChatCommandDebug(input)
     self:Print("debug")
+
+    ns.TabHandler:RemoveAllDisplayed()
+    ns.TabHandler:AddTab("Test")
 end
 
 function CollectorsToDoList:DumpMounts()

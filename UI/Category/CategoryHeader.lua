@@ -7,7 +7,7 @@ local CategoryHeader = ns.CategoryHeader
 
 function CategoryHeader:CreateHeader(categoryName, parent)
     local categoryHeader = CreateFrame("Button", "CollectorsToDoList_CategoryFrame_" .. categoryName .. "_Header", parent, ns.isDF and "CategoryHeaderTemplate" or nil)
-    categoryHeader:SetWidth(350)
+    categoryHeader:SetWidth(ns.UI:GetFrame():GetWidth() * 7 / 9)
     categoryHeader:SetPoint("TOP", 0, 0)
     categoryHeader.layoutIndex = 1
 

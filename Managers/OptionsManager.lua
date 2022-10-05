@@ -25,7 +25,7 @@ function OptionsManager:OnInit()
           args = {
             groupfield = {
               name = "Select Grouping",
-              desc = "Enables / disables the tracking of mounts.",
+              desc = "Change the breakdown of the list in each time.",
               type = "select",
               style = "dropdown",
               values = {

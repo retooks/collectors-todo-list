@@ -5,6 +5,8 @@ local addonName, ns = ...
 ns.Category = {}
 local Category = ns.Category
 
+local ValueHandler = ns.ValueHandler
+
 function Category:CreateCategory(categoryName, parent)
     local category = CreateFrame("Frame", "CollectorsToDoList_CategoryFrame_" .. categoryName, parent, "VerticalLayoutFrame")
     category:SetWidth(350)
@@ -37,6 +39,7 @@ end
 
 function Category:AddValue(category, item, startingState)
     local value = ns.CategoryValue:CreateValue(item, category.categoryValueList, startingState)
+    ValueHandler:Add(item, value)
     value.layoutIndex = category.categoryValueList:GetNumChildren() + 1
     category.categoryValueList:MarkDirty()
 end

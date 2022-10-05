@@ -6,23 +6,29 @@ ns.UI = {}
 local UI = ns.UI
 
 local CollectorsToDoList = ns.CollectorsToDoList
+local StateManager = ns.StateManager
 local CONSTANTS = ns.CONSTANTS
 local Category = ns.Category
+local TabHandler = ns.TabHandler
 
 local MainFrame
 
 local activeResetPeriods = {}
 local categories = {}
-local tabs = {}
 
--- Rebuild how we build the UI panels
+-- TODO Rebuild how we build the UI panels
 -- Need to be able to refresh/redo it based on options changing
-function UI:OnInit(initialState)
+function UI:OnInit()
     if (ns.db.char.ui == nil) then
         ns.db.char.ui = {}
     end
+    UI:BuildFromState()
+end
 
-    for k,v in pairs(initialState) do
+function UI:BuildFromState()
+    local uiState = StateManager:ConvertStateToUI()
+
+    for k,v in pairs(uiState) do
         table.insert(activeResetPeriods, k)
     end
 
@@ -30,7 +36,7 @@ function UI:OnInit(initialState)
 
     UI:CreateFrame()
 
-    for resetPeriodName, resetPeriodValues in pairs(initialState) do
+    for resetPeriodName, resetPeriodValues in pairs(uiState) do
         for catName, catValues in pairs(resetPeriodValues) do
             UI:AddCategory(resetPeriodName, catName)
             table.sort(catValues, function(a, b) return a.item.name < b.item.name end)
@@ -57,55 +63,14 @@ function UI:ToggleFrame()
     end
 end
 
-local function Tab_OnClick(self)
-    PanelTemplates_SetTab(self:GetParent(), self:GetID())
-    
-    local scrollChild = MainFrame.ScrollFrame:GetScrollChild()
-    if (scrollChild) then
-        scrollChild:Hide()
-    end
-    
-    MainFrame.ScrollFrame:SetScrollChild(self.content)
-    self.content:Show() 
+function UI:GetFrame()
+    return MainFrame
 end
 
-local function SetTabs(frame, numTabs, ...)
-    frame.numTabs = numTabs
-
-    local contents = {}
-    local frameName = frame:GetName()
-
-    for i = 1, numTabs do
-        local tab = CreateFrame("Button", frameName.."Tab"..i, frame, ns.isDF and "PanelTabButtonTemplate" or "CharacterFrameTabButtonTemplate")
-        tab:SetID(i)
-        tab:SetText(select(i, ...))
-        tab:SetScript("OnClick", Tab_OnClick)
-
-        tab.content = CreateFrame("Frame", nil, MainFrame.ScrollFrame, "VerticalLayoutFrame")
-        tab.content:SetWidth(350)
-        tab.content:Hide()
-        tab.content:MarkDirty()
-        
-        table.insert(contents, tab.content)
-        
-        if (i == 1) then
-            tab:SetPoint("TOPLEFT", MainFrame, "BOTTOMLEFT", 5, -1)
-        else
-            tab:SetPoint("TOPLEFT", _G[frameName.."Tab"..(i - 1)], "TOPRIGHT", ns.isDF and 0 or -14, 0)
-        end 
-    end
-
-    if #contents > 0 then
-        Tab_OnClick(_G[frameName.."Tab1"])
-    end
-    
-    return unpack(contents)
-end
-
-function UI:CreateFrame() 
+function UI:CreateFrame()
     MainFrame = CreateFrame("Frame", "CollectorsToDoList_MainFrame", UIParent)
 
-    MainFrame:SetSize(450, 600)
+    MainFrame:SetSize(350, 600)
     MainFrame:ClearAllPoints()
     MainFrame:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", ns.db.char.ui.mainFrame.x, ns.db.char.ui.mainFrame.y)
     MainFrame:SetClampedToScreen(true)
@@ -126,7 +91,7 @@ function UI:CreateFrame()
     if ns.db.profile.ui.transparent then
         tex:SetBlendMode("ADD")
     end
-    tex:SetSize(450, 600)
+    tex:SetSize(MainFrame:GetWidth(), MainFrame:GetHeight())
     tex:SetTexCoord(0.02940, 0.14501953125, 0.08294, 0.57397)
 
     local closeButton = CreateFrame("Button", "CTDL_CloseButton", MainFrame, "UIPanelCloseButton")
@@ -143,18 +108,17 @@ function UI:CreateFrame()
 
     --create scroll frame
     MainFrame.ScrollFrame = CreateFrame("ScrollFrame", "CollectorsToDoList_ScrollFrame", MainFrame, "UIPanelScrollFrameTemplate")
-    MainFrame.ScrollFrame:SetWidth(375)
-    MainFrame.ScrollFrame:SetPoint("TOPLEFT", MainFrame, "TOPLEFT", 50, -33)
+    MainFrame.ScrollFrame:SetWidth(MainFrame:GetWidth() * 5 / 6)
+    MainFrame.ScrollFrame:SetPoint("TOPLEFT", MainFrame, "TOPLEFT", 10, -33)
     MainFrame.ScrollFrame:SetPoint("BOTTOMRIGHT", MainFrame, "BOTTOMRIGHT", -25, 4)
     MainFrame.ScrollFrame:SetClipsChildren(true)
 
     MainFrame.ScrollFrame.ScrollBar:ClearAllPoints()
-    MainFrame.ScrollFrame.ScrollBar:SetPoint("TOPLEFT", MainFrame.ScrollFrame, "TOPRIGHT", -16, -18)
-    MainFrame.ScrollFrame.ScrollBar:SetPoint("BOTTOMRIGHT", MainFrame.ScrollFrame, "BOTTOMRIGHT", -11, 18)
+    MainFrame.ScrollFrame.ScrollBar:SetPoint("TOPLEFT", MainFrame.ScrollFrame, "TOPRIGHT", -11, -18)
+    MainFrame.ScrollFrame.ScrollBar:SetPoint("BOTTOMRIGHT", MainFrame.ScrollFrame, "BOTTOMRIGHT", -6, 18)
 
-    local tabTable = { SetTabs(MainFrame, #activeResetPeriods, unpack(activeResetPeriods)) }
     for activeCount = 1, #activeResetPeriods do
-        tabs[activeResetPeriods[activeCount]] = tabTable[activeCount]
+        TabHandler:AddTab(activeResetPeriods[activeCount])
     end
 
     MainFrame:Hide()
@@ -162,9 +126,9 @@ function UI:CreateFrame()
 end
 
 function UI:AddCategory(tabName, categoryName)
-    local cat = Category:CreateCategory(categoryName, tabs[tabName])
-    cat.layoutIndex = tabs[tabName]:GetNumChildren() + 1
-    tabs[tabName]:MarkDirty()
+    local cat = Category:CreateCategory(categoryName, TabHandler:GetTabContentFrame(tabName))
+    cat.layoutIndex = TabHandler:GetTabContentFrame(tabName):GetNumChildren() + 1
+    TabHandler:GetTabContentFrame(tabName):MarkDirty()
 
     if categories[tabName] == nil then
         categories[tabName] = {}
@@ -174,5 +138,5 @@ end
 
 function UI:AddValue(tabName, categoryName, item, startingState)
     Category:AddValue(categories[tabName][categoryName], item, startingState)
-    tabs[tabName]:MarkDirty()
+    TabHandler:GetTabContentFrame(tabName):MarkDirty()
 end

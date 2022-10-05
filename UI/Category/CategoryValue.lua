@@ -11,7 +11,7 @@ local CONSTANTS = ns.CONSTANTS
 
 function CategoryValue:CreateValue(item, parent, startingState)
     local valueContainer = CreateFrame("Frame", nil, parent)
-    valueContainer:SetWidth(350)
+    valueContainer:SetWidth(ns.UI:GetFrame():GetWidth() * 7 / 9)
     valueContainer:SetHeight(25)
     valueContainer:SetPoint("TOP", 0, 0)
 
@@ -38,6 +38,14 @@ function CategoryValue:CreateValue(item, parent, startingState)
     if item.activities ~= nil then
         checkbox:Disable()
         for k,v in pairs(item.activities) do
+            --local activityAttemptable = true
+            --if v.type == CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST then
+            --    local questId = v.questId
+            --    activityAttemptable = activityAttemptable and C_TaskQuest.IsActive(questId)
+            --end
+
+            -- Only create subvalue if we can attempt it
+            --if activityAttemptable then
             local subValue = CategoryValue:CreateSubValue(item, v, startingState, valueContainer)
             if latestSubValue == nil then
                 subValue:SetPoint("TOPLEFT", checkbox, "BOTTOMLEFT", 15, 0)
@@ -45,7 +53,8 @@ function CategoryValue:CreateValue(item, parent, startingState)
                 subValue:SetPoint("TOPLEFT", latestSubValue, "BOTTOMLEFT", 0, 0)
             end
             latestSubValue = subValue
-            valueContainer:SetHeight(valueContainer:GetHeight() + 25)
+            valueContainer:SetHeight(valueContainer:GetHeight() + subValue:GetHeight())
+            --end
         end
     end
 
