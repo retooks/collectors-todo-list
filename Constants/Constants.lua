@@ -53,6 +53,11 @@ CONSTANTS.RESET_PERIOD_DISPLAY_POSITION = {
 	["Unlimited"] = 6
 }
 
+CONSTANTS.GROUPING_FIELDS = {
+	["EXPANSION"] = "expansion",
+	["RESET_PERIOD"] = "resetPeriod"
+}
+
 CONSTANTS.DAY_OF_WEEK = {
 	"Sunday",
 	"Monday",

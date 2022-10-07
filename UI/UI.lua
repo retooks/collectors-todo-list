@@ -9,12 +9,13 @@ local CollectorsToDoList = ns.CollectorsToDoList
 local StateManager = ns.StateManager
 local CONSTANTS = ns.CONSTANTS
 local Category = ns.Category
+local Database = ns.Database
+local CategoryHandler = ns.CategoryHandler
 local TabHandler = ns.TabHandler
+local ItemDisplayHandler = ns.ItemDisplayHandler
+local ItemDisplay = ns.ItemDisplay
 
 local MainFrame
-
-local activeResetPeriods = {}
-local categories = {}
 
 -- TODO Rebuild how we build the UI panels
 -- Need to be able to refresh/redo it based on options changing
@@ -22,29 +23,47 @@ function UI:OnInit()
     if (ns.db.char.ui == nil) then
         ns.db.char.ui = {}
     end
+    UI:CreateFrame()
     UI:BuildFromState()
 end
 
 function UI:BuildFromState()
-    local uiState = StateManager:ConvertStateToUI()
 
-    for k,v in pairs(uiState) do
-        table.insert(activeResetPeriods, k)
-    end
-
-    table.sort(activeResetPeriods, function(a,b) return CONSTANTS.RESET_PERIOD_DISPLAY_POSITION[a] < CONSTANTS.RESET_PERIOD_DISPLAY_POSITION[b] end)
-
-    UI:CreateFrame()
-
-    for resetPeriodName, resetPeriodValues in pairs(uiState) do
-        for catName, catValues in pairs(resetPeriodValues) do
-            UI:AddCategory(resetPeriodName, catName)
-            table.sort(catValues, function(a, b) return a.item.name < b.item.name end)
-            for k, v in ipairs(catValues) do
-                UI:AddValue(resetPeriodName, catName, v.item, v.state)
+    -- CreateItemDisplays
+    for _, resetPeriodName in pairs(CONSTANTS.RESET_PERIOD) do
+        local resetPeriodState = StateManager:GetState(resetPeriodName)
+        if resetPeriodState ~= nil then
+            for itemName, _ in pairs(StateManager:GetState(resetPeriodName)) do
+                local item = Database:GetItem(CONSTANTS.DB.TABLES.MOUNTS, itemName)
+                local itemDisplay = ItemDisplay:CreateItemDisplay(item, MainFrame)
+                ItemDisplayHandler:AddItemDisplay(item, itemDisplay)
             end
         end
     end
+
+    -- CreateTabs
+    local uiState = StateManager:ConvertStateToUI()
+    local activeResetPeriods = {}
+    for resetPeriodName, _ in pairs(uiState) do
+        table.insert(activeResetPeriods, resetPeriodName)
+    end
+
+    -- TODO Move inside tab handler
+    table.sort(activeResetPeriods, function(a,b) return CONSTANTS.RESET_PERIOD_DISPLAY_POSITION[a] < CONSTANTS.RESET_PERIOD_DISPLAY_POSITION[b] end)
+
+    for activeCount = 1, #activeResetPeriods do
+        TabHandler:AddTab(activeResetPeriods[activeCount])
+    end
+
+    --CreateCategories
+    CategoryHandler:CreateCategories()
+
+
+    --AssignItems
+    ItemDisplayHandler:AttachToCategories()
+
+    CategoryHandler:RefreshDisplay()
+
 end
 
 function UI:CloseFrame()
@@ -88,11 +107,18 @@ function UI:CreateFrame()
     local tex = MainFrame:CreateTexture(nil, "BACKGROUND")
     tex:SetAllPoints()
     tex:SetTexture(ns.isDF and "Interface/Professions/Professions" or "Interface/Addons/CollectorsToDoList/Textures/Professions")
-    if ns.db.profile.ui.transparent then
-        tex:SetBlendMode("ADD")
-    end
     tex:SetSize(MainFrame:GetWidth(), MainFrame:GetHeight())
     tex:SetTexCoord(0.02940, 0.14501953125, 0.08294, 0.57397)
+
+    function MainFrame:SetTransparency()
+        if ns.db.profile.ui.transparent then
+            tex:SetBlendMode("ADD")
+        else
+            tex:SetBlendMode("DISABLE")
+        end
+    end
+
+    MainFrame:SetTransparency()
 
     local closeButton = CreateFrame("Button", "CTDL_CloseButton", MainFrame, "UIPanelCloseButton")
     closeButton:SetSize(20, 20)
@@ -117,26 +143,6 @@ function UI:CreateFrame()
     MainFrame.ScrollFrame.ScrollBar:SetPoint("TOPLEFT", MainFrame.ScrollFrame, "TOPRIGHT", -11, -18)
     MainFrame.ScrollFrame.ScrollBar:SetPoint("BOTTOMRIGHT", MainFrame.ScrollFrame, "BOTTOMRIGHT", -6, 18)
 
-    for activeCount = 1, #activeResetPeriods do
-        TabHandler:AddTab(activeResetPeriods[activeCount])
-    end
-
     MainFrame:Hide()
     table.insert(UISpecialFrames, MainFrame:GetName())
-end
-
-function UI:AddCategory(tabName, categoryName)
-    local cat = Category:CreateCategory(categoryName, TabHandler:GetTabContentFrame(tabName))
-    cat.layoutIndex = TabHandler:GetTabContentFrame(tabName):GetNumChildren() + 1
-    TabHandler:GetTabContentFrame(tabName):MarkDirty()
-
-    if categories[tabName] == nil then
-        categories[tabName] = {}
-    end
-    categories[tabName][categoryName] = cat
-end
-
-function UI:AddValue(tabName, categoryName, item, startingState)
-    Category:AddValue(categories[tabName][categoryName], item, startingState)
-    TabHandler:GetTabContentFrame(tabName):MarkDirty()
 end

@@ -168,10 +168,10 @@ function StateManager:ConvertStateToUI()
 			if uiState[item["resetPeriod"]] == nil then
 				uiState[item["resetPeriod"]] = {}
 			end
-			if uiState[item["resetPeriod"]][item[ns.db.profile.grouping]] == nil then
-				uiState[item["resetPeriod"]][item[ns.db.profile.grouping]] = {}
+			if uiState[item["resetPeriod"]][item[CONSTANTS.GROUPING_FIELDS[ns.db.profile.grouping]]] == nil then
+				uiState[item["resetPeriod"]][item[CONSTANTS.GROUPING_FIELDS[ns.db.profile.grouping]]] = {}
 			end
-			table.insert(uiState[item["resetPeriod"]][item[ns.db.profile.grouping]], { ["item"] = item, ["state"] = value })
+			table.insert(uiState[item["resetPeriod"]][item[CONSTANTS.GROUPING_FIELDS[ns.db.profile.grouping]]], { ["item"] = item, ["state"] = value })
 		end
 	end
 

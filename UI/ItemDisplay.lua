@@ -7,7 +7,6 @@ local ItemDisplay = ns.ItemDisplay
 local StateManager = ns.StateManager
 local EventManager = ns.EventManager
 local CollectorsToDoList = ns.CollectorsToDoList
-local StateManager = ns.StateManager
 local CONSTANTS = ns.CONSTANTS
 
 function ItemDisplay:CreateItemDisplay(item, parent)
@@ -55,7 +54,7 @@ function ItemDisplay:CreateItemDisplay(item, parent)
             if latestActivityDisplay == nil then
                 activityDisplay:SetPoint("TOPLEFT", checkbox, "BOTTOMLEFT", 15, 0)
             else
-                activityDisplay:SetPoint("TOPLEFT", latestSubValue, "BOTTOMLEFT", 0, 0)
+                activityDisplay:SetPoint("TOPLEFT", latestActivityDisplay, "BOTTOMLEFT", 0, 0)
             end
             latestActivityDisplay = activityDisplay
             itemContainer:SetHeight(itemContainer:GetHeight() + activityDisplay:GetHeight())
@@ -73,11 +72,11 @@ function ItemDisplay:CreateActivityDisplay(item, activity, startingState, parent
     checkboxText1:SetPoint("LEFT", activityDisplay, "RIGHT", 5, 0)
     checkboxText1:SetText(activity.name)
 
-    subValue:SetScript("OnClick", function (self, button, down)
+    activityDisplay:SetScript("OnClick", function (self, button, down)
         StateManager:SetValue(item, self:GetChecked(), activity.name)
     end)
 
-    subValue:SetChecked(startingState[activity.name])
+    activityDisplay:SetChecked(startingState[activity.name])
 
     EventManager:RegisterCheckboxForStateUpdate(item.name, activity.name, activityDisplay)
 

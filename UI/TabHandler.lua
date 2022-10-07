@@ -119,6 +119,10 @@ function TabHandler:RefreshTabs()
     end
 end
 
+function TabHandler:GetAllTabs()
+    return tabs
+end
+
 function TabHandler:GetTabContentFrame(tabName)
     if tabs[tabName] then
         return tabs[tabName].content

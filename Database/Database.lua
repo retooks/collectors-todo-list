@@ -29,7 +29,7 @@ local defaults = {
 			transparent = false
 		},
 		mounts = true,
-    	grouping = "expansion",
+    	grouping = "EXPANSION",
     	expansions = {
 			["LEGION"] = true,
 			["CATA"] = true,

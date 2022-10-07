@@ -29,10 +29,15 @@ function OptionsManager:OnInit()
               type = "select",
               style = "dropdown",
               values = {
-                ["expansion"] = "Expansion",
-                --["resetPeriod"] = "Reset Period",
+                ["EXPANSION"] = "Expansion",
+                ["RESET_PERIOD"] = "Reset Period",
   },
-              set = function(info, val) ns.db.profile.grouping = val end,
+              set = function(info, val)
+                ns.db.profile.grouping = val
+                ns.CategoryHandler:CreateCategories()
+                ns.ItemDisplayHandler:AttachToCategories()
+                ns.CategoryHandler:RefreshDisplay()
+              end,
               get = function(info) return ns.db.profile.grouping end,
               order = 0
             },
@@ -47,7 +52,10 @@ function OptionsManager:OnInit()
               name = "Enable transparency",
               desc = "Enables / disables the transparency on the UI.",
               type = "toggle",
-              set = function(info, val) ns.db.profile.ui.transparent = val end,
+              set = function(info, val)
+                ns.db.profile.ui.transparent = val
+                ns.UI:GetFrame():SetTransparency()
+              end,
               get = function(info) return ns.db.profile.ui.transparent end,
               order = 0
             },
@@ -58,13 +66,18 @@ function OptionsManager:OnInit()
           type = "group",
           order = 2,
           args = {
+            mountdesc = {
+              name = "All the below options require a reload to take effect.",
+              type = "description",
+              order = 0,
+            },
             mounts = {
               name = "Enable Mounts",
               desc = "Enables / disables the tracking of mounts.",
               type = "toggle",
               set = function(info, val) ns.db.profile.mounts = val end,
               get = function(info) return ns.db.profile.mounts end,
-              order = 0
+              order = 1
             },
             expansions = {
               name = "Expansions",
@@ -73,7 +86,7 @@ function OptionsManager:OnInit()
               values = CONSTANTS.EXPANSION,
               set = function(info, keyname, state) ns.db.profile.expansions[keyname] = state end,
               get = function(info, keyname) return ns.db.profile.expansions[keyname] end,
-              order = 1
+              order = 2
             },
           }
         },
