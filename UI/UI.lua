@@ -17,8 +17,6 @@ local ItemDisplay = ns.ItemDisplay
 
 local MainFrame
 
--- TODO Rebuild how we build the UI panels
--- Need to be able to refresh/redo it based on options changing
 function UI:OnInit()
     if (ns.db.char.ui == nil) then
         ns.db.char.ui = {}
@@ -48,12 +46,11 @@ function UI:BuildFromState()
         table.insert(activeResetPeriods, resetPeriodName)
     end
 
-    -- TODO Move inside tab handler
-    table.sort(activeResetPeriods, function(a,b) return CONSTANTS.RESET_PERIOD_DISPLAY_POSITION[a] < CONSTANTS.RESET_PERIOD_DISPLAY_POSITION[b] end)
-
     for activeCount = 1, #activeResetPeriods do
         TabHandler:AddTab(activeResetPeriods[activeCount])
     end
+
+    TabHandler:RefreshTabs()
 
     --CreateCategories
     CategoryHandler:CreateCategories()
@@ -106,7 +103,7 @@ function UI:CreateFrame()
 
     local tex = MainFrame:CreateTexture(nil, "BACKGROUND")
     tex:SetAllPoints()
-    tex:SetTexture(ns.isDF and "Interface/Professions/Professions" or "Interface/Addons/CollectorsToDoList/Textures/Professions")
+    tex:SetTexture("Interface/Addons/CollectorsToDoList/Textures/Professions")
     tex:SetSize(MainFrame:GetWidth(), MainFrame:GetHeight())
     tex:SetTexCoord(0.02940, 0.14501953125, 0.08294, 0.57397)
 
@@ -137,11 +134,10 @@ function UI:CreateFrame()
     MainFrame.ScrollFrame:SetWidth(MainFrame:GetWidth() * 5 / 6)
     MainFrame.ScrollFrame:SetPoint("TOPLEFT", MainFrame, "TOPLEFT", 10, -33)
     MainFrame.ScrollFrame:SetPoint("BOTTOMRIGHT", MainFrame, "BOTTOMRIGHT", -25, 4)
-    MainFrame.ScrollFrame:SetClipsChildren(true)
 
     MainFrame.ScrollFrame.ScrollBar:ClearAllPoints()
-    MainFrame.ScrollFrame.ScrollBar:SetPoint("TOPLEFT", MainFrame.ScrollFrame, "TOPRIGHT", -11, -18)
-    MainFrame.ScrollFrame.ScrollBar:SetPoint("BOTTOMRIGHT", MainFrame.ScrollFrame, "BOTTOMRIGHT", -6, 18)
+    MainFrame.ScrollFrame.ScrollBar:SetPoint("TOPLEFT", MainFrame.ScrollFrame, "TOPRIGHT", 2, -18)
+    MainFrame.ScrollFrame.ScrollBar:SetPoint("BOTTOMLEFT", MainFrame.ScrollFrame, "BOTTOMRIGHT", 2, 18)
 
     MainFrame:Hide()
     table.insert(UISpecialFrames, MainFrame:GetName())

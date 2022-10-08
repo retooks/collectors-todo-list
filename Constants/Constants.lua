@@ -4,6 +4,11 @@ local _, ns = ...
 ns.CONSTANTS = {}
 local CONSTANTS = ns.CONSTANTS
 
+function ns:setDefault (t, d)
+	local mt = {__index = function () return d end}
+	setmetatable(t, mt)
+end
+
 CONSTANTS.EVENTS = {
 	["STATE_UPDATE"] = "CollectorsToDoList_StateUpdate_Event"
 }
@@ -14,6 +19,7 @@ CONSTANTS.ACTIVITY_TYPE = {
 	["LOOT_CONTAINER"] = "lootcontainer",
 	["RAID_BOSS"] = "raidboss",
 	["RARE_KILL"] = "rarekill",
+	["INTERACT_NPC"] = "interactnpc",
 }
 
 CONSTANTS.ITEM_TYPE = {
@@ -44,7 +50,7 @@ CONSTANTS.RESET_PERIOD = {
 	["UNLIMITED"] = "Unlimited"
 }
 
-CONSTANTS.RESET_PERIOD_DISPLAY_POSITION = {
+CONSTANTS.TAB_DISPLAY_POSITION = {
 	["Daily"] = 1,
 	["Bi-Weekly"] = 2,
 	["Weekly"] = 3,
@@ -52,6 +58,7 @@ CONSTANTS.RESET_PERIOD_DISPLAY_POSITION = {
 	["Monthly"] = 5,
 	["Unlimited"] = 6
 }
+ns:setDefault(CONSTANTS.TAB_DISPLAY_POSITION, 999)
 
 CONSTANTS.GROUPING_FIELDS = {
 	["EXPANSION"] = "expansion",

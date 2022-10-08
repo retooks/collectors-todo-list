@@ -9,11 +9,7 @@ local CollectorsToDoList = ns.CollectorsToDoList
 local CONSTANTS = ns.CONSTANTS
 
 local tabs = {}
-local tabsSize = 0
-local tabIds = {}
 local displayedTabs = {}
-local displayedTabsSize = 0
-local activeTabName
 
 local function Tab_OnClick(self)
     PanelTemplates_SetTab(self:GetParent(), self:GetID())
@@ -23,23 +19,17 @@ local function Tab_OnClick(self)
         scrollChild:Hide()
     end
 
-    activeTabName = tabIds[self:GetID()]:GetText()
-
     ns.UI:GetFrame().ScrollFrame:SetScrollChild(self.content)
     self.content:Show()
 end
 
 local function CreateTab(tabName)
-    local id = #tabIds + 1
     local tab = CreateFrame("Button", "CollectorsToDoList_Tab_"..tabName, ns.UI:GetFrame(), ns.isDF and "PanelTabButtonTemplate" or "CharacterFrameTabButtonTemplate")
-    tab:SetID(id)
     tab:SetText(tabName)
     tab:SetScript("OnClick", Tab_OnClick)
 
-    tabIds[id] = tab
-
     tab.content = CreateFrame("Frame", nil, ns.UI:GetFrame().ScrollFrame, "VerticalLayoutFrame")
-    tab.content:SetWidth(350)
+    tab.content:SetWidth(ns.UI:GetFrame().ScrollFrame:GetWidth())
     tab.content:Hide()
     tab.content:MarkDirty()
 
@@ -50,73 +40,55 @@ function TabHandler:AddTab(tabName)
     -- Create it if it doesn't exist in tab table
     if tabs[tabName] == nil then
         tabs[tabName] = CreateTab(tabName)
-        tabsSize = tabsSize + 1
-        ns.UI:GetFrame().numTabs = tabsSize
-        --TODO need to remove tabs from this to add/remove them
-        ns.UI:GetFrame().Tabs = tabIds
+        PanelTemplates_TabResize(tabs[tabName])
     end
     -- Add it to the tabs on the bottom of the frame
-    displayedTabs[tabName] = tabs[tabName]
-    displayedTabsSize = displayedTabsSize + 1
-
-    -- Ensure the state of all the tabs is correct when new one is added to the frame
-    if activeTabName == nil then
-        Tab_OnClick(_G["CollectorsToDoList_Tab_" .. tabName])
-    else
-        Tab_OnClick(_G["CollectorsToDoList_Tab_" .. activeTabName])
-    end
-
-    TabHandler:RefreshTabs()
-end
-
-function TabHandler:RemoveTab(tabName)
-    -- Remove it from the bottom of the frame
-    tabs[tabName]:ClearAllPoints()
-    for id, tabNameL in pairs(tabIds) do
-        if tabName == tabNameL then
-            PanelTemplates_DisableTab(ns.UI:GetFrame(), id)
-        end
-    end
-    displayedTabs[tabName] = nil
-    displayedTabsSize = displayedTabsSize - 1
-    -- If it is the active one swap to the first tab
-    if activeTabName == tabName then
-        for tabNameL, tab in pairs(displayedTabs) do
-            tab:Hide()
-            Tab_OnClick(_G["CollectorsToDoList_Tab_" .. tabNameL])
-            break
-        end
-    end
-    TabHandler:RefreshTabs()
+    table.insert(displayedTabs, tabName)
 end
 
 function TabHandler:RemoveAllDisplayed()
-    for tabName, tab in pairs(displayedTabs) do
-        TabHandler:RemoveTab(tabName)
+    for pos, tabName in pairs(displayedTabs) do
+        tabs[tabName]:ClearAllPoints()
+        tabs[tabName]:Hide()
+        displayedTabs[pos] = nil
     end
 end
 
 function TabHandler:RefreshTabs()
-    --TODO handle tab order
-    local frame = ns.UI:GetFrame()
-    local maxWidth = frame:GetWidth()
-
     local currentX = 0
     local currentY = 0
 
-    for tabName, tab in pairs(displayedTabs) do
+    table.sort(displayedTabs, function(a,b)
+        return CONSTANTS.TAB_DISPLAY_POSITION[a]  < CONSTANTS.TAB_DISPLAY_POSITION[b]
+    end)
+
+    local frameTabs = {}
+    for pos, tabName in pairs(displayedTabs) do
+        local tab = tabs[tabName]
+        frameTabs[pos] = tab
+        tab:SetID(pos)
         tab:Show()
-        tab:ClearAllPoints()
-        tab:SetPoint("TOPLEFT", frame, "BOTTOMLEFT", currentX, currentY)
-        currentX = currentX + PanelTemplates_GetTabWidth(tab)
-        if currentX >= maxWidth then
-            currentY = currentY - tab:GetHeight() - 5
-            currentX = 0
-            tab:ClearAllPoints()
-            tab:SetPoint("TOPLEFT", frame, "BOTTOMLEFT", currentX, currentY)
-            currentX = currentX + PanelTemplates_GetTabWidth(tab)
-        end
+        currentX, currentY = TabHandler:SetTabPoints(tab, currentX, currentY)
     end
+
+    ns.UI:GetFrame().numTabs = #frameTabs
+    ns.UI:GetFrame().Tabs = frameTabs
+
+    Tab_OnClick(_G["CollectorsToDoList_Tab_" .. displayedTabs[1]])
+end
+
+function TabHandler:SetTabPoints(tab, currentXIn, currentYIn)
+    local currentX = currentXIn
+    local currentY = currentYIn
+    tab:ClearAllPoints()
+    tab:SetPoint("TOPLEFT", ns.UI:GetFrame(), "BOTTOMLEFT", currentX, currentY)
+    currentX = currentX + PanelTemplates_GetTabWidth(tab)
+    if currentX >= ns.UI:GetFrame():GetWidth() then
+        currentY = currentY - tab:GetHeight() - 5
+        currentX = 0
+        currentX, currentY = TabHandler:SetTabPoints(tab, currentX, currentY)
+    end
+    return currentX, currentY
 end
 
 function TabHandler:GetAllTabs()

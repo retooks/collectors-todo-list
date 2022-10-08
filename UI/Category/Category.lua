@@ -37,6 +37,7 @@ end
 
 function Category:AddValue(category, value)
     value:SetParent(category.categoryValueList)
+    value:SetWidth(category.categoryValueList:GetWidth())
     value.layoutIndex = category.categoryValueList:GetNumChildren() + 1
     category.categoryValueList:MarkDirty()
 end

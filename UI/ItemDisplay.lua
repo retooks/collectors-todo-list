@@ -10,17 +10,16 @@ local CollectorsToDoList = ns.CollectorsToDoList
 local CONSTANTS = ns.CONSTANTS
 
 function ItemDisplay:CreateItemDisplay(item, parent)
-    local itemContainer = CreateFrame("Frame", nil, parent)
-    itemContainer:SetWidth(ns.UI:GetFrame():GetWidth() * 7 / 9)
+    local itemContainer = CreateFrame("Frame", nil, parent, "VerticalLayoutFrame")
+    itemContainer:SetWidth(parent:GetWidth())
     itemContainer:SetHeight(25)
     itemContainer:SetPoint("TOP", 0, 0)
 
     local startingState = StateManager:GetState(item.resetPeriod, item.name)
 
-
     local checkboxName = ItemDisplay:GetCheckboxNameFromName(item.name)
     local checkbox = CreateFrame("CheckButton", "CollectorsToDoList_" .. "_Checkbox_" .. checkboxName, itemContainer, "ChatConfigCheckButtonTemplate")
-    checkbox:SetPoint("TOPLEFT", 10, 0)
+    checkbox.layoutIndex = 1
 
     local checkboxText = checkbox:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     checkboxText:SetPoint("LEFT", checkbox, "RIGHT", 5, 0)
@@ -36,49 +35,58 @@ function ItemDisplay:CreateItemDisplay(item, parent)
 
     EventManager:RegisterCheckboxForStateUpdate(item.name, "main", checkbox)
 
-    if item.activities ~= nil then
-        local latestActivityDisplay
+    if item.activities then
         checkbox:Disable()
-        itemContainer.activities = {}
-        for k,v in pairs(item.activities) do
-            --local activityAttemptable = true
-            --if v.type == CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST then
-            --    local questId = v.questId
-            --    activityAttemptable = activityAttemptable and C_TaskQuest.IsActive(questId)
-            --end
-
-            -- Only create subvalue if we can attempt it
-            --if activityAttemptable then
-            local activityDisplay = ItemDisplay:CreateActivityDisplay(item, v, startingState, itemContainer)
-            itemContainer.activities[v.name] = activityDisplay
-            if latestActivityDisplay == nil then
-                activityDisplay:SetPoint("TOPLEFT", checkbox, "BOTTOMLEFT", 15, 0)
-            else
-                activityDisplay:SetPoint("TOPLEFT", latestActivityDisplay, "BOTTOMLEFT", 0, 0)
-            end
-            latestActivityDisplay = activityDisplay
-            itemContainer:SetHeight(itemContainer:GetHeight() + activityDisplay:GetHeight())
-            --end
-        end
+        ItemDisplay:RefreshActivities(item, itemContainer)
     end
 
     return itemContainer
 end
 
+function ItemDisplay:RefreshActivities(item, parent)
+    local state = StateManager:GetState(item.resetPeriod, item.name)
+    local currentActivities = ns.ItemDisplayHandler:GetItemActivities(item.name)
+    if currentActivities ~= nil then
+        for _, activityDisplay in pairs(currentActivities) do
+            activityDisplay.layoutIndex = nil
+            activityDisplay:Hide()
+        end
+    end
+    local activities = {}
+    for _, activity in pairs(item.activities) do
+        if ns.ActivityUtils:CheckDepends(activity, item, state) then
+            local activityDisplay = ItemDisplay:CreateActivityDisplay(item, activity, state, parent)
+            table.insert(activities, activityDisplay)
+
+            activityDisplay.layoutIndex = activity.id + 1
+            activityDisplay.leftPadding = 15
+            activityDisplay:Show()
+        end
+    end
+    ns.ItemDisplayHandler:AddItemActivities(item, activities)
+    parent:MarkDirty()
+    return activities
+end
+
 function ItemDisplay:CreateActivityDisplay(item, activity, startingState, parent)
-    local activityDisplay = CreateFrame("CheckButton", nil, parent, "ChatConfigCheckButtonTemplate")
+    local activityDisplay = ns.ItemActivityHandler:GetActivity(item.name, activity.name)
+    if activityDisplay == nil then
+        activityDisplay = CreateFrame("CheckButton", nil, parent, "ChatConfigCheckButtonTemplate")
 
-    local checkboxText1 = activityDisplay:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    checkboxText1:SetPoint("LEFT", activityDisplay, "RIGHT", 5, 0)
-    checkboxText1:SetText(activity.name)
+        local checkboxText1 = activityDisplay:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        checkboxText1:SetPoint("LEFT", activityDisplay, "RIGHT", 5, 0)
+        checkboxText1:SetText(activity.name)
 
-    activityDisplay:SetScript("OnClick", function (self, button, down)
-        StateManager:SetValue(item, self:GetChecked(), activity.name)
-    end)
+        activityDisplay:SetScript("OnClick", function (self, button, down)
+            StateManager:SetValue(item, self:GetChecked(), activity.name)
+            ItemDisplay:RefreshActivities(item, parent)
 
-    activityDisplay:SetChecked(startingState[activity.name])
+        end)
 
-    EventManager:RegisterCheckboxForStateUpdate(item.name, activity.name, activityDisplay)
+        activityDisplay:SetChecked(startingState[activity.name])
+        ns.ItemActivityHandler:AddActivity(item.name, activity.name, activityDisplay)
+        EventManager:RegisterCheckboxForStateUpdate(item.name, activity.name, activityDisplay)
+    end
 
     return activityDisplay
 end

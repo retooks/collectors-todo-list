@@ -138,8 +138,8 @@ local mounts = {
         resetPeriod = CONSTANTS.RESET_PERIOD.DAILY,
         tip = "Rare - Tahonta. Must have Neena abomination with you.",
         activities = {
-            ["Recruit Neena"] = { name = "Recruit Neena", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=57603 },
-            ["Kill Tahonta"] = { name = "Kill Tahonta", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=162586 },
+            [1] = { id = 1, name = "Recruit Neena", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=57603 },
+            [2] = { id = 2, name = "Kill Tahonta", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=162586, dependsOn={1} },
         }
     },
     ["Chosen Tauralus"] = {
@@ -196,7 +196,7 @@ local mounts = {
         resetPeriod = CONSTANTS.RESET_PERIOD.DAILY,
         tip = "Rare - Warbringer Mal'Korak",
         activities = {
-            ["Kill Warbringer Mal'Korak"] = { name = "Kill Warbringer Mal'Korak", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=162819 },
+            [1] = { id = 1, name = "Kill Warbringer Mal'Korak", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=162819 },
         }
     },
     ["Gorespine"] = {
@@ -208,7 +208,7 @@ local mounts = {
         resetPeriod = CONSTANTS.RESET_PERIOD.DAILY,
         tip = "Rare - Nerissa Heartless",
         activities = {
-            ["Kill Nerissa Heartless"] = { name = "Kill Nerissa Heartless", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=162690 },
+            [1] = { id = 1, name = "Kill Nerissa Heartless", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=162690 },
         }
     },
     ["Lurid Bloodtusk"] = {
@@ -472,7 +472,7 @@ local mounts = {
         resetPeriod = CONSTANTS.RESET_PERIOD.DAILY,
         tip = "Rare - Violet Mistake",
         activities = {
-            ["Kill Violet Mistake"] = { name = "Kill Violet Mistake", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=157309 },
+            [1] = { id = 1, name = "Kill Violet Mistake", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=157309 },
         }
     },
     ["Predatory Plagueroc"] = {
@@ -951,31 +951,34 @@ local mounts = {
         resetPeriod = CONSTANTS.RESET_PERIOD.DAILY,
         tip = "Ve'nari Paragon Cache",
         activities = {
-            ["Acquisition: Blazing Ingots"] = { name = "Acquisition: Blazing Ingots", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63050},
-            ["A Shadowed Fate"] = { name = "A Shadowed Fate", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63166},
-            ["Disrupting the Flow"] = { name = "Disrupting the Flow", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60732},
-            ["Torment for the Taking"] = { name = "Torment for the Taking", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63062},
-            ["Misery's Company"] = { name = "Misery's Company", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63100},
-            ["A Monument to Vengeance"] = { name = "A Monument to Vengeance", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63039},
-            ["Sundered Souls"] = { name = "Sundered Souls", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63043},
-            ["Acquisition: Runeforged Shackles"] = { name = "Acquisition: Runeforged Shackles", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63047},
-            ["Drowned and Torn Asunder"] = { name = "Drowned and Torn Asunder", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63179},
-            ["Acquisition: Crystallized Stygia"] = { name = "Acquisition: Crystallized Stygia", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63031},
-            ["A Suitable Demise"] = { name = "A Suitable Demise", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60775},
-            ["Dust to Dust"] = { name = "Dust to Dust", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61088},
-            ["Eye of the Scryer"] = { name = "Eye of the Scryer", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60622},
-            ["The Jailer's Share"] = { name = "The Jailer's Share", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61079},
-            ["Misery Business"] = { name = "Misery Business", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60646},
-            ["Death Motes"] = { name = "Death Motes", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60762},
-            ["Grathalax, the Extractor"] = { name = "Grathalax, the Extractor", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61104},
-            ["Disrupting the Cycle"] = { name = "Disrupting the Cycle", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61103},
-            ["A Spark of Light"] = { name = "A Spark of Light", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61075},
-            ["Words of Warding"] = { name = "Words of Warding", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61765},
-            ["Power of the Colossus"] = { name = "Power of the Colossus", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=62234},
-            ["Forces of Perdition"] = { name = "Forces of Perdition", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=62214},
-            ["Acquisition: Stygic Ore"] = { name = "Acquisition: Stygic Ore", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63072},
-            ["Rodent Removal"] = { name = "Rodent Removal", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=62239},
-            ["What They Know"] = { name = "What They Know", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63069},
+            [1] = { id = 1, name = "Speak to Ve'nari", type = CONSTANTS.ACTIVITY_TYPE.INTERACT_NPC, npcId = 162804},
+            [2] = { id = 2, name = "Acquisition: Blazing Ingots", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63050},
+            [3] = { id = 3, name = "A Shadowed Fate", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63166},
+            [4] = { id = 4, name = "Disrupting the Flow", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60732},
+            [5] = { id = 5, name = "Torment for the Taking", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63062},
+            [6] = { id = 6, name = "Misery's Company", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63100},
+            [7] = { id = 7, name = "A Monument to Vengeance", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63039},
+            [8] = { id = 8, name = "Sundered Souls", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63043},
+            [9] = { id = 9, name = "Acquisition: Runeforged Shackles", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63047},
+            [10] = { id = 10, name = "Drowned and Torn Asunder", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63179},
+            [11] = { id = 11, name = "Acquisition: Crystallized Stygia", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63031},
+            [12] = { id = 12, name = "A Suitable Demise", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60775, dependsOn={1}},
+            [13] = { id = 13, name = "Dust to Dust", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61088, dependsOn={1}},
+            [14] = { id = 14, name = "Eye of the Scryer", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60622, dependsOn={1}},
+            [15] = { id = 15, name = "The Jailer's Share", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61079, dependsOn={1}},
+            [16] = { id = 16, name = "Misery Business", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60646, dependsOn={1}},
+            [17] = { id = 17, name = "Death Motes", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=60762, dependsOn={1}},
+            [18] = { id = 18, name = "Grathalax, the Extractor", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61104, dependsOn={1}},
+            [19] = { id = 19, name = "Disrupting the Cycle", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61103, dependsOn={1}},
+            [20] = { id = 20, name = "A Spark of Light", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61075, dependsOn={1}},
+            [21] = { id = 21, name = "Words of Warding", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=61765, dependsOn={1}},
+            [22] = { id = 22, name = "Power of the Colossus", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=62234, dependsOn={1}},
+            [23] = { id = 23, name = "Forces of Perdition", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=62214},
+            [24] = { id = 24, name = "Acquisition: Stygic Ore", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63072},
+            [25] = { id = 25, name = "Rodent Removal", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=62239},
+            [26] = { id = 26, name = "What They Know", type = CONSTANTS.ACTIVITY_TYPE.DAILY_QUEST, questId=63069},
+            -- wrath of jailer
+            -- tormentors of torghast
         }
     },
     ["Fallen Charger"] = {
@@ -1347,7 +1350,7 @@ local mounts = {
         resetPeriod = CONSTANTS.RESET_PERIOD.DAILY,
         tip = "Rare - Rhuv, Gorger of Ruin",
         activities = {
-            ["Kill Rhuv, Gorger of Ruin"] = { name = "Kill Rhuv, Gorger of Ruin", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=182120 },
+            [1] = { id = 1, name = "Kill Rhuv, Gorger of Ruin", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=182120 },
         }
     },
     ["Colossal Wraithbound Mawrat"] = {
@@ -1377,7 +1380,7 @@ local mounts = {
         resetPeriod = CONSTANTS.RESET_PERIOD.DAILY,
         tip = "Rare - Hopecrusher",
         activities = {
-            ["Kill Hopecrusher"] = { name = "Kill Hopecrusher", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=166679 },
+            [1] = { id = 1, name = "Kill Hopecrusher", type = CONSTANTS.ACTIVITY_TYPE.RARE_KILL, npcId=166679 },
         }
     },
     ["Battle Gargon Vrednic"] = {

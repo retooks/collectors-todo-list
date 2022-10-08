@@ -8,6 +8,7 @@
     <Script file="Constants\Constants.lua"/>
 
 
+    <Script file="Utils\ActivityUtils.lua"/>
     <Script file="Utils\MountUtils.lua"/>
 
     <Script file="Database\Database.lua"/>
@@ -25,10 +26,11 @@
     <Script file="UI\Category\CategoryHeader.lua"/>
     <Script file="UI\Category\CategoryValue.lua"/>
     <Script file="UI\Category\CategoryValueList.lua"/>
-    <Script file="UI\Category.lua"/>
+    <Script file="UI\Category\Category.lua"/>
 
     <Script file="UI\ItemDisplay.lua"/>
     <Script file="UI\ItemDisplayHandler.lua"/>
+    <Script file="UI\ItemActivityHandler.lua"/>
 
     <Script file="UI\CategoryHandler.lua"/>
 

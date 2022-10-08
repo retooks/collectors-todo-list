@@ -53,9 +53,6 @@ end
 
 function CollectorsToDoList:ChatCommandDebug(input)
     self:Print("debug")
-
-    ns.TabHandler:RemoveAllDisplayed()
-    ns.TabHandler:AddTab("Test")
 end
 
 function CollectorsToDoList:DumpMounts()

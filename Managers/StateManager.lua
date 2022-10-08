@@ -81,12 +81,12 @@ function StateManager:ActivitiesChanged(item)
 		["main"] = ns.db.char.state[item.resetPeriod][item.name]["main"]
 	}
 	if (item.activities ~= nil) then
-		for k,v in pairs(item.activities) do
-			local activityValue = ns.db.char.state[item.resetPeriod][item.name][k]
+		for _, activity in pairs(item.activities) do
+			local activityValue = ns.db.char.state[item.resetPeriod][item.name][activity.name]
 			if activityValue ~= nil then
-				finalActivities[k] = activityValue
+				finalActivities[activity.name] = activityValue
 			else
-				finalActivities[k] = false
+				finalActivities[activity.name] = false
 			end
 		end
 	end
@@ -118,7 +118,7 @@ function StateManager:SetValue(item, newState, itemKey)
 		if dbItem.activities ~= nil then
 			local activitiesDone = true
 			for k,v in pairs(dbItem.activities) do
-				activitiesDone = activitiesDone and ns.db.char.state[dbItem.resetPeriod][dbItem.name][k]
+				activitiesDone = activitiesDone and ns.db.char.state[dbItem.resetPeriod][dbItem.name][v.name]
 			end
 			if activitiesDone then
 				StateManager:SetValue(dbItem, true, "main")
