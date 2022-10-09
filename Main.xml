@@ -8,20 +8,34 @@
     <Script file="Constants\Constants.lua"/>
 
 
+    <Script file="Utils\ActivityUtils.lua"/>
     <Script file="Utils\MountUtils.lua"/>
 
     <Script file="Database\Database.lua"/>
     <Script file="Database\Item.lua"/>
 
-    <Script file="StateManager.lua"/>
-
-    <Script file="ResetManager\ResetManager.lua"/>
+    <Script file="Managers\StateManager.lua"/>
+    <Script file="Managers\EventManager.lua"/>
+    <Script file="Managers\ResetManager.lua"/>
 
     <Script file="Database\Mounts\Shadowlands.lua"/>
 
-    <Script file="OptionsManager.lua"/>
+    <Script file="Managers\OptionsManager.lua"/>
 
-    <Script file="UI\Category.lua"/>
+    <Include file="UI\template.xml"/>
+    <Script file="UI\Category\CategoryHeader.lua"/>
+    <Script file="UI\Category\CategoryValueList.lua"/>
+    <Script file="UI\Category\Category.lua"/>
+    <Script file="UI\Category\CategoryHandler.lua"/>
+
+    <Script file="UI\ItemDisplay.lua"/>
+    <Script file="UI\ItemDisplayHandler.lua"/>
+    <Script file="UI\ItemActivityHandler.lua"/>
+
+
+    <Script file="UI\TabHandler.lua"/>
+
+
     <Script file="UI\UI.lua"/>
     <Script file="CollectorsToDoList.lua"/>
 

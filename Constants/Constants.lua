@@ -4,14 +4,22 @@ local _, ns = ...
 ns.CONSTANTS = {}
 local CONSTANTS = ns.CONSTANTS
 
+function ns:setDefault (t, d)
+	local mt = {__index = function () return d end}
+	setmetatable(t, mt)
+end
+
 CONSTANTS.EVENTS = {
 	["STATE_UPDATE"] = "CollectorsToDoList_StateUpdate_Event"
 }
 
 CONSTANTS.ACTIVITY_TYPE = {
 	["ACHIEVEMENT"] = "achievement",
+	["DAILY_QUEST"] = "dailyquest",
+	["LOOT_CONTAINER"] = "lootcontainer",
 	["RAID_BOSS"] = "raidboss",
 	["RARE_KILL"] = "rarekill",
+	["INTERACT_NPC"] = "interactnpc",
 }
 
 CONSTANTS.ITEM_TYPE = {
@@ -21,15 +29,16 @@ CONSTANTS.ITEM_TYPE = {
 }
 
 CONSTANTS.EXPANSION = {
-	["VANILLA"] = "Vanilla",
-	["TBC"] = "The Burning Crusade",
-	["WOTLK"] = "Wrath of the Lich King",
-	["CATA"] = "Cataclysm",
-	["MOP"] = "Mists of Pandaria",
-	["WOD"] = "Warlords of Draenor",
-	["LEGION"] = "Legion",
-	["BFA"] = "Battle for Azeroth",
+	--["VANILLA"] = "Vanilla",
+	--["TBC"] = "The Burning Crusade",
+	--["WOTLK"] = "Wrath of the Lich King",
+	--["CATA"] = "Cataclysm",
+	--["MOP"] = "Mists of Pandaria",
+	--["WOD"] = "Warlords of Draenor",
+	--["LEGION"] = "Legion",
+	--["BFA"] = "Battle for Azeroth",
 	["SHADOWLANDS"] = "Shadowlands",
+	--["DRAGONFLIGHT"] = "Dragonflight"
 }
 
 CONSTANTS.RESET_PERIOD = {
@@ -41,13 +50,19 @@ CONSTANTS.RESET_PERIOD = {
 	["UNLIMITED"] = "Unlimited"
 }
 
-CONSTANTS.RESET_PERIOD_DISPLAY_POSITION = {
+CONSTANTS.TAB_DISPLAY_POSITION = {
 	["Daily"] = 1,
 	["Bi-Weekly"] = 2,
 	["Weekly"] = 3,
 	["Fortnightly"] = 4,
 	["Monthly"] = 5,
 	["Unlimited"] = 6
+}
+ns:setDefault(CONSTANTS.TAB_DISPLAY_POSITION, 999)
+
+CONSTANTS.GROUPING_FIELDS = {
+	["EXPANSION"] = "expansion",
+	["RESET_PERIOD"] = "resetPeriod"
 }
 
 CONSTANTS.DAY_OF_WEEK = {

@@ -25,11 +25,16 @@ local defaults = {
         state = {}
     },
     profile = {
-    	grouping = "expansion",
+		ui = {
+			transparent = false
+		},
+		mounts = true,
+    	grouping = "EXPANSION",
     	expansions = {
 			["LEGION"] = true,
 			["CATA"] = true,
 			["SHADOWLANDS"] = true,
+			["DRAGONFLIGHT"] = true,
 			["VANILLA"] = true,
 			["WOD"] = true,
 			["TBC"] = true,
@@ -50,7 +55,17 @@ function Database:OnInit()
 		["MOUNTS"] = "mounts"
 	}
 
-	ns.Mounts_Shadowlands:OnInit()
+	for k,v in pairs(CONSTANTS.DB.TABLES) do
+		if ns.db.tables[v] == nil then
+			ns.db.tables[v] = {}
+		end
+	end
+
+	if ns.db.profile.mounts then
+		if ns.db.profile.expansions["SHADOWLANDS"] then
+			ns.Mounts_Shadowlands:OnInit()
+		end
+	end
 end	
 
 --[[
@@ -64,9 +79,6 @@ end
 --]]
 
 function Database:AddItems(tableName, items)
-	if ns.db.tables[tableName] == nil then
-		ns.db.tables[tableName] = {}
-	end
 	for key, item in pairs(items) do
 		ns.db.tables[tableName][key] = item
 	end
@@ -82,6 +94,7 @@ end
 
 function migrateDataToLatest()
 	migrateData100To101()
+	migrateData101To110()
 end
 
 function migrateData100To101()
@@ -123,5 +136,18 @@ function migrateData100To101()
 		end
 
 		ns.db.char.dataVersion = "1.0.1"
+	end
+end
+
+function migrateData101To110()
+	if ns.db.char.dataVersion == "1.0.1" then
+		for _,v in pairs(CONSTANTS.RESET_PERIOD) do
+			if ns.db.char.state[v] ~= nil then
+				for k1,v1 in pairs(ns.db.char.state[v]) do
+					ns.db.char.state[v][k1] = {["main"] = v1}
+				end
+			end
+		end
+		ns.db.char.dataVersion = "1.1.0"
 	end
 end
